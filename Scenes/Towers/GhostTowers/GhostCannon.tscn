@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://coex2ncuwng4s"]
+
+[ext_resource type="Material" uid="uid://5672bj16nxg1" path="res://Assets/Material/building material.tres" id="1_y2j1d"]
+[ext_resource type="ArrayMesh" uid="uid://dns5simp8wv44" path="res://Assets/Models/Cannon/tower1.obj" id="2_4tc2t"]
+[ext_resource type="ArrayMesh" uid="uid://cya26r7hkdtgy" path="res://Assets/Models/Cannon/tower2.obj" id="3_xup3q"]
+[ext_resource type="Script" uid="uid://chuf2drvcbx40" path="res://Components/CrossingObjComponent.cs" id="4_v88uv"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_xrivr"]
+inner_radius = 11.5
+outer_radius = 12.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xrivr"]
+height = 2.633789
+radius = 1.4423828
+
+[node name="ghost_cannon" type="Node3D" unique_id=1386093753]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1570202510]
+material_override = ExtResource("1_y2j1d")
+mesh = ExtResource("2_4tc2t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=330212785]
+material_override = ExtResource("1_y2j1d")
+mesh = ExtResource("3_xup3q")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1912619016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018415451, -0.01770401, 0.022179604)
+material_override = ExtResource("1_y2j1d")
+mesh = SubResource("TorusMesh_xrivr")
+
+[node name="CrossingObjComponent" type="Area3D" parent="." unique_id=1364458912]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("4_v88uv")
+metadata/_custom_type_script = "uid://chuf2drvcbx40"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CrossingObjComponent" unique_id=1593085130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31689453, 0)
+shape = SubResource("CylinderShape3D_xrivr")
+
+[connection signal="body_entered" from="CrossingObjComponent" to="CrossingObjComponent" method="OnBodyEntered"]
+[connection signal="body_exited" from="CrossingObjComponent" to="CrossingObjComponent" method="OnBodyExited"]

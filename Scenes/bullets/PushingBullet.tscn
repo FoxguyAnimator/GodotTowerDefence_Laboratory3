@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cnvlga7es2wrt"]
+
+[ext_resource type="Script" uid="uid://c4atwx8o1fbeb" path="res://Components/MoveComponent.cs" id="1_12q2m"]
+[ext_resource type="Script" uid="uid://bgpirmgymrbxa" path="res://Components/PushingDamageComponent.cs" id="2_12q2m"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xrivr"]
+radius = 0.52130145
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1lj4"]
+albedo_color = Color(0.6864, 0.78, 0.07800002, 1)
+emission_enabled = true
+emission = Color(1, 0.7, 0, 1)
+emission_energy_multiplier = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_13qdw"]
+
+[node name="Bullet" type="CharacterBody3D" unique_id=1607210722]
+
+[node name="MoveComponent" type="Node" parent="." unique_id=80191465]
+script = ExtResource("1_12q2m")
+Speed = 10.0
+metadata/_custom_type_script = "uid://c4atwx8o1fbeb"
+
+[node name="DamageComponent" type="Area3D" parent="." unique_id=120218224 node_paths=PackedStringArray("_bulletMoveComponent")]
+collision_mask = 0
+script = ExtResource("2_12q2m")
+_bulletMoveComponent = NodePath("../MoveComponent")
+metadata/_custom_type_script = "uid://bgpirmgymrbxa"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DamageComponent" unique_id=696428134]
+shape = SubResource("SphereShape3D_xrivr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=748542455]
+material_override = SubResource("StandardMaterial3D_b1lj4")
+mesh = SubResource("SphereMesh_13qdw")
+
+[connection signal="body_entered" from="DamageComponent" to="DamageComponent" method="OnBulletBodyEntered"]

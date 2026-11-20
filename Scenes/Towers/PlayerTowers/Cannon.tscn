@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://i3p8pt6l0ve6"]
+
+[ext_resource type="Script" uid="uid://8hi76ufwholg" path="res://Components/HealthComponent.cs" id="1_4yjk7"]
+[ext_resource type="PackedScene" uid="uid://cvyfbg1cux336" path="res://Scenes/DamageVisibility.tscn" id="2_e53nj"]
+[ext_resource type="ArrayMesh" uid="uid://dns5simp8wv44" path="res://Assets/Models/Cannon/tower1.obj" id="2_k6scv"]
+[ext_resource type="Script" uid="uid://jkajmbj8pkqw" path="res://Components/ShootComponent.cs" id="2_tpt2e"]
+[ext_resource type="PackedScene" uid="uid://bdqrvi88ou3c5" path="res://Scenes/bullets/bullet.tscn" id="3_xyfrd"]
+[ext_resource type="Script" uid="uid://cih8fkysvuge3" path="res://Components/VisibilityComponent.cs" id="4_xyfrd"]
+[ext_resource type="ArrayMesh" uid="uid://cya26r7hkdtgy" path="res://Assets/Models/Cannon/tower2.obj" id="6_aqd11"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xrivr"]
+radius = 0.7128906
+height = 2.3684082
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tpt2e"]
+albedo_color = Color(0.9766666, 0.8, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e53nj"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.023529412)
+
+[sub_resource type="TorusMesh" id="TorusMesh_vseyf"]
+inner_radius = 11.9
+outer_radius = 12.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_il7y0"]
+radius = 12.0
+
+[node name="Cannon" type="CharacterBody3D" unique_id=1498506364 groups=["Tower"]]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2018510736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17785645, 0)
+shape = SubResource("CapsuleShape3D_xrivr")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=835663416 node_paths=PackedStringArray("damageVisibility")]
+script = ExtResource("1_4yjk7")
+damageVisibility = NodePath("DamageVisibility")
+metadata/_custom_type_script = "uid://8hi76ufwholg"
+
+[node name="DamageVisibility" parent="HealthComponent" unique_id=1615800023 instance=ExtResource("2_e53nj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.395267, 0)
+
+[node name="Node3D" type="Node3D" parent="." unique_id=447992403]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1757695677]
+material_override = SubResource("StandardMaterial3D_tpt2e")
+mesh = ExtResource("2_k6scv")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1332971927]
+material_override = SubResource("StandardMaterial3D_e53nj")
+mesh = SubResource("TorusMesh_vseyf")
+
+[node name="VisibilityComponent" type="Area3D" parent="." unique_id=483870538 node_paths=PackedStringArray("shootComponent")]
+collision_mask = 2
+script = ExtResource("4_xyfrd")
+shootComponent = NodePath("../ShootComponent")
+metadata/_custom_type_script = "uid://cih8fkysvuge3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilityComponent" unique_id=1923711284]
+shape = SubResource("CylinderShape3D_il7y0")
+
+[node name="ShootComponent" type="Node3D" parent="." unique_id=1281304826 node_paths=PackedStringArray("marker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1731656, 0.09254849)
+script = ExtResource("2_tpt2e")
+BulletScene = ExtResource("3_xyfrd")
+marker = NodePath("MeshInstance3D/Marker3D")
+TargetGroups = Array[int]([2])
+metadata/_custom_type_script = "uid://jkajmbj8pkqw"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ShootComponent" unique_id=2057685069]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.1804994, 0)
+mesh = ExtResource("6_aqd11")
+
+[node name="Marker3D" type="Marker3D" parent="ShootComponent/MeshInstance3D" unique_id=1580206424]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8722258e-08, 1.0878651, 1.2681137)
+
+[connection signal="body_entered" from="VisibilityComponent" to="VisibilityComponent" method="OnBodyEntered"]
+[connection signal="body_exited" from="VisibilityComponent" to="VisibilityComponent" method="OnBodyExited"]

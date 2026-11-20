@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bkh3mtujsc1ov"]
+
+[ext_resource type="Material" uid="uid://5672bj16nxg1" path="res://Assets/Material/building material.tres" id="1_lw6y8"]
+[ext_resource type="ArrayMesh" uid="uid://bgg4a7y82etf4" path="res://Assets/Models/PoundingTower/PoundingTower1.obj" id="2_ntktq"]
+[ext_resource type="ArrayMesh" uid="uid://d1nrspamui2y1" path="res://Assets/Models/PoundingTower/PoundingTower2.obj" id="3_lw6y8"]
+[ext_resource type="Script" uid="uid://chuf2drvcbx40" path="res://Components/CrossingObjComponent.cs" id="5_opjlj"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_ntktq"]
+inner_radius = 9.5
+outer_radius = 10.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xrivr"]
+height = 3.6469116
+radius = 2.3222656
+
+[node name="ghost_cannon" type="Node3D" unique_id=1386093753]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1570202510]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, -0.40563846, 0)
+material_override = ExtResource("1_lw6y8")
+mesh = ExtResource("2_ntktq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=330212785]
+material_override = ExtResource("1_lw6y8")
+mesh = ExtResource("3_lw6y8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1259248532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.10288125, 0)
+material_override = ExtResource("1_lw6y8")
+mesh = SubResource("TorusMesh_ntktq")
+
+[node name="CrossingObjComponent" type="Area3D" parent="." unique_id=1364458912]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("5_opjlj")
+metadata/_custom_type_script = "uid://chuf2drvcbx40"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CrossingObjComponent" unique_id=1593085130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8236389, 0)
+shape = SubResource("CylinderShape3D_xrivr")
+
+[connection signal="body_entered" from="CrossingObjComponent" to="CrossingObjComponent" method="OnBodyEntered"]
+[connection signal="body_exited" from="CrossingObjComponent" to="CrossingObjComponent" method="OnBodyExited"]

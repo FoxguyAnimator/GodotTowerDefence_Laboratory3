@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://c6i4rhi0v84xm"]
+
+[ext_resource type="Script" uid="uid://8hi76ufwholg" path="res://Components/HealthComponent.cs" id="1_r8id2"]
+[ext_resource type="PackedScene" uid="uid://cvyfbg1cux336" path="res://Scenes/DamageVisibility.tscn" id="2_5bbcm"]
+[ext_resource type="ArrayMesh" uid="uid://bgg4a7y82etf4" path="res://Assets/Models/PoundingTower/PoundingTower1.obj" id="2_r8id2"]
+[ext_resource type="ArrayMesh" uid="uid://d1nrspamui2y1" path="res://Assets/Models/PoundingTower/PoundingTower2.obj" id="3_24j2q"]
+[ext_resource type="Script" uid="uid://cih8fkysvuge3" path="res://Components/VisibilityComponent.cs" id="3_dpdgs"]
+[ext_resource type="Script" uid="uid://jkajmbj8pkqw" path="res://Components/ShootComponent.cs" id="5_r8id2"]
+[ext_resource type="PackedScene" uid="uid://cnvlga7es2wrt" path="res://Scenes/bullets/PushingBullet.tscn" id="7_dpdgs"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xrivr"]
+height = 3.1747742
+radius = 2.2285156
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xrivr"]
+albedo_color = Color(0.6383519, 0.52451694, 1.92523e-07, 1)
+
+[sub_resource type="Animation" id="Animation_5bbcm"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_r8id2"]
+resource_name = "Shooting"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D/MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -1.68, 0), Vector3(0, 0.05, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dpdgs"]
+_data = {
+&"RESET": SubResource("Animation_5bbcm"),
+&"Shooting": SubResource("Animation_r8id2")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5bbcm"]
+transparency = 1
+albedo_color = Color(1, 0.7931667, 0.26999998, 0.023529412)
+
+[sub_resource type="TorusMesh" id="TorusMesh_dpdgs"]
+inner_radius = 9.9
+outer_radius = 10.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_il7y0"]
+radius = 10.0
+
+[node name="PoundingTower" type="CharacterBody3D" unique_id=1498506364 groups=["Tower"]]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2018510736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0684967, 0)
+shape = SubResource("CylinderShape3D_xrivr")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=835663416 node_paths=PackedStringArray("damageVisibility")]
+script = ExtResource("1_r8id2")
+MaxHealth = 170.0
+damageVisibility = NodePath("DamageVisibility")
+metadata/_custom_type_script = "uid://8hi76ufwholg"
+
+[node name="DamageVisibility" parent="HealthComponent" unique_id=1615800023 instance=ExtResource("2_5bbcm")]
+
+[node name="Node3D" type="Node3D" parent="." unique_id=447992403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35937238, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1757695677]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, -0.9, 0)
+material_override = SubResource("StandardMaterial3D_xrivr")
+mesh = ExtResource("2_r8id2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/MeshInstance3D" unique_id=476617965]
+mesh = ExtResource("3_24j2q")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Node3D" unique_id=980320212]
+libraries/ = SubResource("AnimationLibrary_dpdgs")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1015171194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8043592, 0)
+material_override = SubResource("StandardMaterial3D_5bbcm")
+mesh = SubResource("TorusMesh_dpdgs")
+
+[node name="ShootComponent" type="Node3D" parent="." unique_id=1015675870 node_paths=PackedStringArray("marker", "ShootAnimation")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.0103657, 0)
+script = ExtResource("5_r8id2")
+BulletScene = ExtResource("7_dpdgs")
+marker = NodePath("Marker3D")
+ShootAnimation = NodePath("../Node3D/AnimationPlayer")
+ShootTimerInSeconds = 1.5
+bulletDamage = 20.0
+bulletSpeed = 5.0
+TargetGroups = Array[int]([2])
+metadata/_custom_type_script = "uid://jkajmbj8pkqw"
+
+[node name="Marker3D" type="Marker3D" parent="ShootComponent" unique_id=555373362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2389239, 0)
+
+[node name="VisibilityComponent" type="Area3D" parent="." unique_id=483870538 node_paths=PackedStringArray("shootComponent")]
+collision_mask = 2
+script = ExtResource("3_dpdgs")
+shootComponent = NodePath("../ShootComponent")
+metadata/_custom_type_script = "uid://cih8fkysvuge3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilityComponent" unique_id=1923711284]
+shape = SubResource("CylinderShape3D_il7y0")
+
+[connection signal="body_entered" from="VisibilityComponent" to="VisibilityComponent" method="OnBodyEntered"]
+[connection signal="body_exited" from="VisibilityComponent" to="VisibilityComponent" method="OnBodyExited"]

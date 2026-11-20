@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://ekog2hkpa1ub"]
+
+[ext_resource type="Script" uid="uid://8hi76ufwholg" path="res://Components/HealthComponent.cs" id="1_161ks"]
+[ext_resource type="ArrayMesh" uid="uid://c1tsumbs7gyxb" path="res://Assets/Models/ElectroTower/ElectroTower1.obj" id="2_gg8wc"]
+[ext_resource type="ArrayMesh" uid="uid://dudj2bcjjifx0" path="res://Assets/Models/ElectroTower/ElectroTower3.obj" id="3_g0m8k"]
+[ext_resource type="Script" uid="uid://jkajmbj8pkqw" path="res://Components/ShootComponent.cs" id="4_6ksj0"]
+[ext_resource type="ArrayMesh" uid="uid://c2bb26u3q8nea" path="res://Assets/Models/ElectroTower/ElectroTower2.obj" id="5_74tq3"]
+[ext_resource type="PackedScene" uid="uid://bwnnlyj05ueed" path="res://Scenes/bullets/ElectroBullet.tscn" id="6_cg566"]
+[ext_resource type="PackedScene" uid="uid://cvyfbg1cux336" path="res://Scenes/DamageVisibility.tscn" id="6_t3x0w"]
+[ext_resource type="Script" uid="uid://cih8fkysvuge3" path="res://Components/VisibilityComponent.cs" id="8_cg566"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xrivr"]
+radius = 0.7211914
+height = 2.605957
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkybt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_buqqs"]
+resource_local_to_scene = true
+metallic = 1.0
+metallic_specular = 0.6
+emission_enabled = true
+emission = Color(1.0973811e-05, 0.7822009, 0.9398199, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13qdw"]
+transparency = 1
+albedo_color = Color(0.39999998, 0.92999995, 1, 0.023529412)
+
+[sub_resource type="TorusMesh" id="TorusMesh_xrivr"]
+inner_radius = 8.9
+outer_radius = 9.0
+
+[sub_resource type="Animation" id="Animation_16emf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:material_override:emission_energy_multiplier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D2:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../ShootComponent/MeshInstance3D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vcliy"]
+resource_name = "Shooting"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:material_override:emission_energy_multiplier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.5),
+"transitions": PackedFloat32Array(1, 1, 0.26794344),
+"update": 0,
+"values": [1.0, 5.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D2:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 3.1415927, 0), Vector3(0, 6.2831855, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../ShootComponent/MeshInstance3D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -3.1415927, 0), Vector3(0, -6.2831855, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pwi04"]
+_data = {
+&"RESET": SubResource("Animation_16emf"),
+&"Shooting": SubResource("Animation_vcliy")
+}
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xrivr"]
+height = 2.4365234
+radius = 9.0
+
+[node name="ElectroTower" type="CharacterBody3D" unique_id=1548595335]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1296603933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.30297852, 0)
+shape = SubResource("CapsuleShape3D_xrivr")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1957920458 node_paths=PackedStringArray("damageVisibility")]
+script = ExtResource("1_161ks")
+MaxHealth = 70.0
+damageVisibility = NodePath("DamageVisibility")
+metadata/_custom_type_script = "uid://8hi76ufwholg"
+
+[node name="DamageVisibility" parent="HealthComponent" unique_id=1615800023 instance=ExtResource("6_t3x0w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0582957, 0)
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1585009790]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=117387712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9944769, 0)
+material_override = SubResource("StandardMaterial3D_fkybt")
+mesh = ExtResource("2_gg8wc")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=1132085849]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9944769, 0)
+material_override = SubResource("StandardMaterial3D_buqqs")
+mesh = ExtResource("3_g0m8k")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=913084320]
+material_override = SubResource("StandardMaterial3D_13qdw")
+mesh = SubResource("TorusMesh_xrivr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Node3D" unique_id=316374334]
+libraries/ = SubResource("AnimationLibrary_pwi04")
+
+[node name="ShootComponent" type="Node3D" parent="." unique_id=577087492 node_paths=PackedStringArray("marker", "ShootAnimation")]
+script = ExtResource("4_6ksj0")
+BulletScene = ExtResource("6_cg566")
+marker = NodePath("MeshInstance3D/Marker3D")
+ShootAnimation = NodePath("../Node3D/AnimationPlayer")
+ShootTimerInSeconds = 1.0
+TargetGroups = Array[int]([2])
+metadata/_custom_type_script = "uid://jkajmbj8pkqw"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ShootComponent" unique_id=1398229069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9944769, 0)
+material_override = SubResource("StandardMaterial3D_buqqs")
+mesh = ExtResource("5_74tq3")
+
+[node name="Marker3D" type="Marker3D" parent="ShootComponent/MeshInstance3D" unique_id=1544042930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8549418, 0)
+
+[node name="VisibilityComponent" type="Area3D" parent="." unique_id=767002123 node_paths=PackedStringArray("shootComponent")]
+collision_mask = 2
+script = ExtResource("8_cg566")
+shootComponent = NodePath("../ShootComponent")
+metadata/_custom_type_script = "uid://cih8fkysvuge3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisibilityComponent" unique_id=797108817]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21826172, 0)
+shape = SubResource("CylinderShape3D_xrivr")

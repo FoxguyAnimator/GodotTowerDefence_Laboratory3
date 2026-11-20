@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bdqrvi88ou3c5"]
+
+[ext_resource type="Script" uid="uid://di45gcswi6klg" path="res://Components/DamageComponent.cs" id="2_oduel"]
+[ext_resource type="Script" uid="uid://c4atwx8o1fbeb" path="res://Components/MoveComponent.cs" id="2_ycag2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xrivr"]
+radius = 0.25126007
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1lj4"]
+emission_enabled = true
+emission = Color(0, 0.77414024, 0.8512235, 1)
+emission_energy_multiplier = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_13qdw"]
+
+[node name="Bullet" type="CharacterBody3D" unique_id=1607210722]
+
+[node name="MoveComponent" type="Node" parent="." unique_id=80191465]
+script = ExtResource("2_ycag2")
+Speed = 10.0
+metadata/_custom_type_script = "uid://c4atwx8o1fbeb"
+
+[node name="DamageComponent" type="Area3D" parent="." unique_id=603653997]
+collision_mask = 0
+script = ExtResource("2_oduel")
+metadata/_custom_type_script = "uid://di45gcswi6klg"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DamageComponent" unique_id=696428134]
+shape = SubResource("SphereShape3D_xrivr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=748542455]
+transform = Transform3D(0.36, 0, 0, 0, 0.36, 0, 0, 0, 0.36, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_b1lj4")
+mesh = SubResource("SphereMesh_13qdw")
+
+[connection signal="body_entered" from="DamageComponent" to="DamageComponent" method="OnBulletBodyEntered"]

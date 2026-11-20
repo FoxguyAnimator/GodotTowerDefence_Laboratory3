@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://ballx8onsxg1r"]
+
+[ext_resource type="Script" uid="uid://1dcakph71lqi" path="res://Scenes/Player.cs" id="1_v0iea"]
+[ext_resource type="PackedScene" uid="uid://coex2ncuwng4s" path="res://Scenes/Towers/GhostTowers/GhostCannon.tscn" id="2_6t5aa"]
+[ext_resource type="PackedScene" uid="uid://bh5syqtyaar8t" path="res://Scenes/Towers/GhostTowers/GhostElectroTower.tscn" id="2_cvnsp"]
+[ext_resource type="PackedScene" uid="uid://bkh3mtujsc1ov" path="res://Scenes/Towers/GhostTowers/GhostPoundingTower.tscn" id="4_3smsa"]
+[ext_resource type="PackedScene" uid="uid://i3p8pt6l0ve6" path="res://Scenes/Towers/PlayerTowers/Cannon.tscn" id="4_fkybt"]
+[ext_resource type="PackedScene" uid="uid://ekog2hkpa1ub" path="res://Scenes/Towers/PlayerTowers/ElectroTower.tscn" id="5_x3wgy"]
+[ext_resource type="PackedScene" uid="uid://c6i4rhi0v84xm" path="res://Scenes/Towers/PlayerTowers/PoundingTower.tscn" id="7_8erm5"]
+[ext_resource type="Script" uid="uid://jkajmbj8pkqw" path="res://Components/ShootComponent.cs" id="8_f1ek2"]
+[ext_resource type="PackedScene" uid="uid://bdqrvi88ou3c5" path="res://Scenes/bullets/bullet.tscn" id="9_tx1dd"]
+[ext_resource type="Script" uid="uid://8hi76ufwholg" path="res://Components/HealthComponent.cs" id="10_gymyn"]
+[ext_resource type="PackedScene" uid="uid://cvyfbg1cux336" path="res://Scenes/DamageVisibility.tscn" id="11_pu2lt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_13qdw"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_buqqs"]
+albedo_color = Color(0.39495537, 0.61305153, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xrivr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fs7ap"]
+albedo_color = Color(0.82000005, 1, 0.55, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_13qdw"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_xrivr"]
+
+[node name="Player" type="CharacterBody3D" unique_id=344403501]
+collision_mask = 3
+script = ExtResource("1_v0iea")
+GhostTowers = Array[PackedScene]([ExtResource("2_6t5aa"), ExtResource("2_cvnsp"), ExtResource("4_3smsa")])
+Towers = Array[PackedScene]([ExtResource("4_fkybt"), ExtResource("5_x3wgy"), ExtResource("7_8erm5")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=380008558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_13qdw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=288166269]
+material_override = SubResource("StandardMaterial3D_buqqs")
+mesh = SubResource("BoxMesh_xrivr")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1458438130]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, -0.5, 0, 0.5, -2.1855694e-08, 0, -0.12729979, -0.48421538)
+material_override = SubResource("StandardMaterial3D_fs7ap")
+mesh = SubResource("CylinderMesh_13qdw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D4" unique_id=2123317683]
+transform = Transform3D(0.8, 0, 0, 0, -3.4969112e-08, 0.8, 0, -0.8, -3.4969112e-08, -0.5535018, 0.917916, -1.6315999)
+material_override = SubResource("StandardMaterial3D_fs7ap")
+mesh = SubResource("PrismMesh_xrivr")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D4/MeshInstance3D2" unique_id=2017879712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4119297, 0, 0)
+material_override = SubResource("StandardMaterial3D_fs7ap")
+mesh = SubResource("PrismMesh_xrivr")
+
+[node name="ShootComponent" type="Node3D" parent="." unique_id=472671881 node_paths=PackedStringArray("marker")]
+script = ExtResource("8_f1ek2")
+BulletScene = ExtResource("9_tx1dd")
+marker = NodePath("Marker3D")
+bulletDamage = 5.0
+bulletSpeed = 25.0
+TargetGroups = Array[int]([2])
+metadata/_custom_type_script = "uid://jkajmbj8pkqw"
+
+[node name="Marker3D" type="Marker3D" parent="ShootComponent" unique_id=2113225944]
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1804984060 node_paths=PackedStringArray("damageVisibility")]
+script = ExtResource("10_gymyn")
+MaxHealth = 200.0
+damageVisibility = NodePath("DamageVisibility")
+metadata/_custom_type_script = "uid://8hi76ufwholg"
+
+[node name="DamageVisibility" parent="HealthComponent" unique_id=1615800023 instance=ExtResource("11_pu2lt")]

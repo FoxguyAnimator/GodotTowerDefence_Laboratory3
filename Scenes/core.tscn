@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cc3xrlmjj35tp"]
+
+[ext_resource type="Script" uid="uid://d2pd5yhyk3lm6" path="res://Scenes/Core.cs" id="1_gqdy1"]
+[ext_resource type="ArrayMesh" uid="uid://w7o1n2akd7iu" path="res://Assets/Models/Core/core_1.obj" id="1_wtb72"]
+[ext_resource type="ArrayMesh" uid="uid://dxkhpk5040t17" path="res://Assets/Models/Core/core_2.obj" id="2_lstiq"]
+[ext_resource type="Script" uid="uid://8hi76ufwholg" path="res://Components/HealthComponent.cs" id="3_lstiq"]
+[ext_resource type="PackedScene" uid="uid://cvyfbg1cux336" path="res://Scenes/DamageVisibility.tscn" id="5_gxbf5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gxbf5"]
+albedo_color = Color(0.21806103, 0.21806103, 0.21806103, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gl8j7"]
+albedo_color = Color(0.8226427, 0.8226427, 0.82264256, 1)
+metallic = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xrivr"]
+size = Vector3(2.2109375, 2.3192596, 2.2490234)
+
+[node name="Core" type="CharacterBody3D" unique_id=430555991]
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_gqdy1")
+
+[node name="BaseMesh" type="MeshInstance3D" parent="." unique_id=1455065877]
+material_override = SubResource("StandardMaterial3D_gxbf5")
+mesh = ExtResource("1_wtb72")
+
+[node name="GearMesh" type="MeshInstance3D" parent="." unique_id=1604240184]
+material_override = SubResource("StandardMaterial3D_gl8j7")
+mesh = ExtResource("2_lstiq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=496336770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8346726, 0)
+shape = SubResource("BoxShape3D_xrivr")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1469893152 node_paths=PackedStringArray("damageVisibility")]
+script = ExtResource("3_lstiq")
+MaxHealth = 200.0
+damageVisibility = NodePath("DamageVisibility")
+metadata/_custom_type_script = "uid://8hi76ufwholg"
+
+[node name="DamageVisibility" parent="HealthComponent" unique_id=1615800023 instance=ExtResource("5_gxbf5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6732565, 0)

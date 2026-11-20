@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://cmb5glb2fpqlb"]
+
+[ext_resource type="Texture2D" uid="uid://cc77xukwqdc6l" path="res://Assets/Textures/grid.png" id="1_fs7ap"]
+[ext_resource type="PackedScene" uid="uid://cc3xrlmjj35tp" path="res://Scenes/core.tscn" id="2_0tirt"]
+[ext_resource type="PackedScene" uid="uid://ballx8onsxg1r" path="res://Scenes/player.tscn" id="3_7x21m"]
+[ext_resource type="PackedScene" uid="uid://khnyyy8tfdjc" path="res://Scenes/Towers/EnemyTowers/EnemyTower.tscn" id="4_buqqs"]
+[ext_resource type="PackedScene" uid="uid://ceog2uhhout1c" path="res://Scenes/Towers/EnemyTowers/Crawler.tscn" id="5_fs7ap"]
+
+[sub_resource type="Environment" id="Environment_wv4s5"]
+glow_enabled = true
+glow_intensity = 0.9
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_13qdw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hrwt"]
+albedo_color = Color(0.14911404, 0.14911404, 0.14911404, 1)
+albedo_texture = ExtResource("1_fs7ap")
+uv1_scale = Vector3(8.996, 8.996, 8.996)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xrivr"]
+
+[node name="Field" type="Node3D" unique_id=763595366]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1710661578]
+environment = SubResource("Environment_wv4s5")
+
+[node name="Floor" type="Node3D" parent="." unique_id=995065136]
+
+[node name="FloorStaticBody" type="StaticBody3D" parent="Floor" unique_id=1796302883]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/FloorStaticBody" unique_id=2099856734]
+shape = SubResource("WorldBoundaryShape3D_13qdw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/FloorStaticBody" unique_id=1662211608]
+transform = Transform3D(56.577785, 0, 0, 0, 18.815, 0, 0, 0, 56.577785, -0.001127243, 0.018558502, -0.051676273)
+material_override = SubResource("StandardMaterial3D_7hrwt")
+mesh = SubResource("PlaneMesh_xrivr")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1526491461]
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 20, 10)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1551780826]
+transform = Transform3D(0.9990182, 0.044304304, 1.6866836e-09, -0.009775682, 0.22043195, 0.9753535, 0.04321235, -0.97439575, 0.22064863, 0, 11.345339, 0)
+light_energy = 1.674
+light_indirect_energy = 1.578
+
+[node name="Player" parent="." unique_id=344403501 instance=ExtResource("3_7x21m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.8751774, 2)
+
+[node name="Core" parent="." unique_id=252382778 instance=ExtResource("2_0tirt")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="Enemy" parent="." unique_id=625817496 instance=ExtResource("5_fs7ap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.817152, 0, -14.860919)
+
+[node name="Enemy2" parent="." unique_id=1498506364 instance=ExtResource("4_buqqs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.362066, 0.68835926, 12.403799)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=835253762]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1528560081]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -178.0
+offset_top = -105.0
+offset_right = 974.0
+offset_bottom = 531.0
+grow_horizontal = 0
+theme_override_font_sizes/normal_font_size = 64
+text = "GAME OVER  
+       T_T"
+scroll_active = false
+
+[node name="Reminder" type="CanvasLayer" parent="." unique_id=121452172]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Reminder" unique_id=1578080118]
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 166.0
+offset_bottom = 291.0
+theme_override_font_sizes/normal_font_size = 10
+text = "- WASD - перемещение
+- ЛКМ - стрельба 
+- ПКМ - перещение камеры
+- колесико - приближение/отдаление камеры
+- Клавиша \"Е\" (англ) - строительство ВКЛ/ВЫКЛ
+
+В режиме строительства:
+	- крутить колесико - переключать башни
+	- ЛКМ - поставить башню"
+scroll_active = false
